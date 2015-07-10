@@ -84,3 +84,16 @@ define('EXIT_USER_INPUT', 7); // invalid user input
 define('EXIT_DATABASE', 8); // database error
 define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
 define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
+
+/*
+|--------------------------------------------------------------------------
+| Plantilla
+|--------------------------------------------------------------------------
+|
+| Usada para ubicar las rutas en las que se encuentran los archivos del
+| theme y el template.
+|
+*/
+define('THEME','theme/adminlte/');
+define('TEMPLATE','template');
+define('TEMPLATELOGIN','template_login');
