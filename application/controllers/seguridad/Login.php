@@ -2,10 +2,11 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Login extends CI_Controller {
+class Login extends MY_Controller {
 
     public function __construct() {
         parent::__construct();
+        $this->vista = 'seguridad/' . $this->controlador . '/';
     }
 
     /**
@@ -16,7 +17,16 @@ class Login extends CI_Controller {
      *          - Si los datos no son validados le devuelve mensaje de error al usuario
      */
     public function index() {
-        $this->load->view(THEME . TEMPLATELOGIN, array('contenido' => 'seguridad/login/index'));
+        $this->form_validation->set_rules('usuario', 'Usuario', 'trim|required|callback__verificar_usuario');
+        $this->form_validation->set_rules('password', 'Contraseña', 'trim|required');
+        $this->form_validation->set_message('_verificar_usuario', 'Usuario o Contraseña incorrecta');
+        if ($this->form_validation->run()) {
+            if ($this->seguridad->crearSession()) {
+                redirect($this->session->userdata('peticion_url'));
+            }
+        } else {
+            $this->load->view(THEME . TEMPLATELOGIN, array('contenido' => $this->vista . 'index'));
+        }
     }
 
     /**
