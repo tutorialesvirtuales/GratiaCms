@@ -94,6 +94,7 @@ define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 | theme y el template.
 |
 */
-define('THEME','theme/adminlte/');
+define('THEME','theme/sbadmin/');
 define('TEMPLATE','template');
 define('TEMPLATELOGIN','template_login');
+define('TEMPLATEASSETS','assets/sbadmin/');
