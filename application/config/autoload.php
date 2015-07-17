@@ -104,7 +104,7 @@ $autoload['helper'] = array('url','inflector','gratiacms');
 |
 */
 
-$autoload['config'] = array();
+$autoload['config'] = array('gratiacms');
 
 
 /*
@@ -120,7 +120,7 @@ $autoload['config'] = array();
 |
 */
 
-$autoload['language'] = array();
+$autoload['language'] = array('mensajes');
 
 
 /*

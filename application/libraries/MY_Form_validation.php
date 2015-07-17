@@ -34,10 +34,36 @@ class MY_Form_validation extends CI_Form_validation {
         parent::__construct($rules);
         $this->CI = & get_instance(); // Permite acceder a los recursos nativos de codeigniter.
         $this->_error_prefix = '<div class="alert alert-danger">'
-                . '<button type="button" class="close" data-dismiss="alert"></button>';
+                . '<button type="button" class="close" data-dismiss="alert">&times;</button>';
         $this->_error_suffix = '</div>';
     }
 
+    /**
+     * Este metodo valida un campo único en una tabla
+     * tanto para adición como actualización
+     * de registros. 
+     * Se crea debido a que la validación de 
+     * codeigniter solo funciona en la adición.
+     * @param type $value Valor que se desea validar
+     * @param type $params Nombres de tabla y campo a validar separados por un "."
+     * @return boolean Retorna TRUE Si pasa la validación, FALSE si falla.
+     */
+    public function unique($value, $params) {
+        list($table, $field) = explode(".", $params, 2); //Se separan el nombre de la tabla y el del campo
+        $this->CI->form_validation->set_message('unique', 'El Registro ' . $value . ' ya existe');
+        if (!empty($table) && !empty($field)) {
+            if ($this->CI->input->post('id')) {
+                $this->CI->db->where('id !=', $this->CI->input->post('id'));
+            }
+            $this->CI->db->where($field, $value);
+            $query = $this->CI->db->get($table)->row();
+            if ($query)
+                return FALSE;
+            return TRUE;
+        } else {
+            show_error('Call to Form_validation::unique() failed, parameter not in "table.column" notation');
+        }
+    }
 
     /**
      * Este método extiende la libreria de validacion de codigniter

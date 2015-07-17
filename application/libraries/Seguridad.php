@@ -35,10 +35,11 @@ class Seguridad {
         $controller = $this->CI->router->class;
         $method = $this->CI->router->method;
         $is_login = $this->CI->session->userdata('user_login');
-        if ($controller !== 'login' && $controller !== 'migrations' && $controller !== 'inicio' && !$is_login) {
+        $controllerP = array('login', 'migrations', 'inicio', 'registro');
+        if (!in_array($controller, $controllerP) && !$is_login) {
             $this->CI->session->set_userdata('peticion_url', current_url());
             redirect('seguridad/login');
-        } else if ($controller === 'login' && $is_login && $method != 'salir') {
+        } else if ($is_login && $controller === 'login' && $method != 'salir') {
             redirect('/');
         }
         $this->checkPermisos($controller, $method, $this->CI->session->userdata('rol_id'));
@@ -101,7 +102,8 @@ class Seguridad {
      *              - Redirect si no tiene los permisos lo redirecciona al home
      */
     private function checkPermisos($controlador, $metodo, $rol_id) {
-        if ($rol_id === '1' OR $this->CI->input->is_ajax_request() OR $controlador === 'inicio' OR $controlador === 'login' OR $controlador === 'migrations') {
+        $controllerP = array('inicio', 'login', 'migrations', 'registro');
+        if ($rol_id === '1' OR $this->CI->input->is_ajax_request() OR in_array($controlador, $controllerP)) {
             return TRUE;
         }
         if ($rol_id !== '1' AND $this->CI->uri->segment(1) !== 'admin') {
@@ -111,9 +113,11 @@ class Seguridad {
             if (isset($permisos[$permiso])) {
                 return TRUE;
             } else {
+                mensaje_alerta('error', 'permiso');
                 redirect('/');
             }
         } else {
+            mensaje_alerta('error', 'permiso');
             redirect('/');
         }
     }

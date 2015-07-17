@@ -2,6 +2,20 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+/**
+ * Controlador que permite gestionar los Menús del sistema
+ *
+ * @package         GRATIACMS
+ * @subpackage      Seguridad
+ * @category        Controlador
+ * @author          tutorialesvrituales.com
+ * @author          Roosevelt Guinand
+ * @link            http://tutorialesvirtuales.com
+ * @version         Current v1.0.0 
+ * @copyright       Copyright (c) 2010 - 2015 Tutorialesvirtuales
+ * @license         MIT
+ * @since           14/07/2015
+ */
 class Login extends MY_Controller {
 
     public function __construct() {

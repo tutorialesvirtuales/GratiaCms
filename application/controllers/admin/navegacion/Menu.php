@@ -43,7 +43,6 @@ class Menu extends MY_Controller {
             'contenido' => $this->vista . 'index',
             'datas' => $this->Modelo->order_by('posicion', 'asc')->get_many_by(array('tipo_menu_id' => $tipo_menu, 'menu_id IS NULL')),
             'tipo_menu' => $tipo_menu,
-            'breads' => array(array('ruta' => 'javascript:;', 'titulo' => $this->titulo))
         );
         $this->load->view(THEME . TEMPLATE, $data);
     }
@@ -66,8 +65,6 @@ class Menu extends MY_Controller {
                 'titulo' => 'Crear ' . $this->titulo,
                 'contenido' => $this->vista . 'crear',
                 'tipo_menu' => $tipo_menu,
-                'breads' => array(array('ruta' => $this->url.$tipo_menu, 'titulo' => $this->titulo),
-                    array('ruta' => 'javascript:;', 'titulo' => 'Crear'))
             );
             $this->load->view(THEME . TEMPLATE, $data);
         }
@@ -95,8 +92,6 @@ class Menu extends MY_Controller {
                 'contenido' => $this->vista . 'crear',
                 'data' => $dato ? $dato : show_404(),
                 'tipo_menu' => $tipo_menu,
-                'breads' => array(array('ruta' => $this->url.$tipo_menu, 'titulo' => $this->titulo),
-                    array('ruta' => 'javascript:;', 'titulo' => 'Actualizar ' . $this->titulo)),
             );
             $this->load->view(THEME . TEMPLATE, $data);
         }
@@ -180,7 +175,7 @@ class Menu extends MY_Controller {
         $this->load->library('Menu_sih');
         $tipos = $this->Tipo_menu_model->get_all();
         foreach ($tipos as $tipo) {
-            $archivos = glob(FCPATH . 'assets/sihweb/menus/' . $tipo->id . '/*.json');
+            $archivos = glob(FCPATH . 'assets/gratiacms/menus/' . $tipo->id . '/*.json');
             foreach ($archivos as $archivo) {
                 unlink($archivo);
             }
