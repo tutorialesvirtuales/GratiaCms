@@ -3,7 +3,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
- * Controlador que permite gestionar los Permisos del sistema
+ * Controlador que permite gestionar los Usuarios del sistema
  *
  * @package         GRATIACMS
  * @subpackage      Admin
@@ -14,9 +14,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @version         Current v1.0.0 
  * @copyright       Copyright (c) 2010 - 2015 Tutorialesvirtuales
  * @license         MIT
- * @since           06/08/2015
+ * @since           14/07/2015
  */
-class Permiso extends MY_Controller {
+class Usuario extends MY_Controller {
 
     /**
      * Permite la carga de los Modelos a ser usuados, en los diferentes metodos de la clase 
@@ -25,6 +25,7 @@ class Permiso extends MY_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('admin/seguridad/' . modelo(), 'Modelo');
+        $this->load->model('admin/seguridad/Rol_model');
         /* VARIABLES PARA DINAMIZAR */
         $this->url = base_url() . 'admin/seguridad/' . str_replace('_', '-', $this->controlador) . '/';
         $this->vista = 'admin/seguridad/' . $this->controlador . '/';
@@ -32,36 +33,36 @@ class Permiso extends MY_Controller {
     }
 
     /**
-     * Lista todos los permisos registrados en la DB.
+     * Lista todos las usuarios de rol super-administrador
+     * registrados en la DB.
      * @return      String vista
      */
     public function index() {
         $data = array(
             'titulo' => $this->titulo,
-            'contenido' => $this->vista . 'index',
-            'breads' => array(array('ruta' => 'javascript:;', 'titulo' => $this->titulo))
+            'contenido' => $this->vista . 'index'
         );
         $this->load->view(THEME . TEMPLATE, $data);
     }
 
     /**
      * Este método primero consulta si esta recibiendo datos via POST,
-     * y si es así valida y guarda el registro del nuevo permiso en la tabla,
-     * de lo contrario carga el formulario para crear un nuevo registro
-     * @return  Mixed si recibe y valida los datos via POST
-     *          redirecciona hacia el método Index
-     *          de lo contrario carga la vista del formulario
+     * y si es así valida y guarda el registro del nuevo usuario super-administrador
+     * en la tabla, de lo contrario carga el formulario para crear un nuevo registro
+     * @return  Mixed 
+     *          - Si recibe y valida los datos via POST redirecciona hacia el método Index
+     *          - Si no carga la vista del formulario
      */
     public function crear() {
-        if ($this->input->post() && $this->Modelo->insert($this->input->post())) {
+        $this->form_validation->set_rules($this->Modelo->validate);
+        if ($this->form_validation->run() === TRUE) {
+            $this->Modelo->crear(); //No utiliza el método insert de my_model
             mensaje_alerta('hecho', 'crear');
             redirect($this->url);
         } else {
             $data = array(
                 'titulo' => 'Crear ' . $this->titulo,
                 'contenido' => $this->vista . 'crear',
-                'breads' => array(array('ruta' => $this->url, 'titulo' => $this->titulo),
-                    array('ruta' => 'javascript:;', 'titulo' => 'Crear'))
             );
             $this->load->view(THEME . TEMPLATE, $data);
         }
@@ -69,7 +70,7 @@ class Permiso extends MY_Controller {
 
     /**
      * Este método primero consulta si esta recibiendo datos via POST,
-     * y si es así valida y actualiza el registro del permiso en la tabla,
+     * y si es así valida y actualiza el registro del usuario en la tabla,
      * de lo contrario carga el formulario para que el usuario 
      * edite el registro cuyo id se recibe como parametro.
      * @param   integer $id id del registro
@@ -78,55 +79,36 @@ class Permiso extends MY_Controller {
      *          de lo contrario carga la vista del formulario
      */
     public function actualizar($id = FALSE) {
-        if ($this->input->post() && $this->Modelo->update($id, $this->input->post())) {
+        $this->form_validation->set_rules($this->Modelo->validate_update);
+        if ($this->form_validation->run() === TRUE) {
+            $this->Modelo->actualizar($id); //No utiliza el método update de my_model
             mensaje_alerta('hecho', 'actualizar');
             redirect($this->url);
         } else {
-            $dato = $this->Modelo->get($id);
+            $dato = $this->Modelo->getDato($id);
             $data = array(
                 'titulo' => 'Actualizar ' . $this->titulo,
                 'contenido' => $this->vista . 'crear',
-                'data' =>  $dato ? $dato : show_404(),
-                'breads' => array(array('ruta' => $this->url, 'titulo' => $this->titulo),
-                    array('ruta' => 'javascript:;', 'titulo' => 'Actualizar ' . $this->titulo)),
+                'data' => $dato ? $dato : show_404()
             );
             $this->load->view(THEME . TEMPLATE, $data);
         }
     }
-    
+
     /**
-     * Éste método permite eliminar un permiso
-     * Devuelve mensaje de error o exito en el borrado
-     * @param       integer $id id del registro
-     * @return      Redirect to index
+     * Cambia un usuario de estado de acuerdo al estado recibido como parametro
+     * @param Int $id
+     * @param Int $estado
+     * @return Redirect to Index
      */
-    public function eliminar($id = FALSE) {
-        if ($this->Modelo->delete($id)) {
-            mensaje_alerta('hecho', 'eliminar');
+    public function cambiar_estado($id = FALSE, $estado = NULL) {
+        if ($id && $estado !== NULL) {
+            $this->Modelo->update($id, array('estado' => $estado), TRUE);
+            $estado === '0' ? mensaje_alerta('hecho', 'desactivar') : mensaje_alerta('hecho', 'activar');
+            redirect($this->url);
         } else {
-            mensaje_alerta('error', 'eliminar');
+            show_404();
         }
-        redirect($this->url);
-    }
-    
-    
-    /**
-     * Este metodo crea los archivos json
-     * que almacenan los permisos para cada rol.
-     * Esto para que posteriormente al ingresar
-     * los usuarios al sistema puedan acceder a los menus
-     * de acuerdo a los permisos de su rol.
-     * @return Redirect hacia el index
-     */
-    public function crear_archivos(){
-        $this->load->model('admin/seguridad/Rol_model');
-        $roles = $this->Rol_model->get_all();
-        $this->load->library('Permiso_gratiacms');
-        foreach ($roles as $rol){
-            $this->permiso_gratiacms->getPermisosByRol($rol->id);
-        }
-        mensaje_alerta('hecho', 'archivo_permiso');
-        redirect('/');
     }
 
 }

@@ -66,6 +66,52 @@ class MY_Form_validation extends CI_Form_validation {
     }
 
     /**
+     * Este metodo valida varios campos únicos
+     * en una misma tabla tanto para adición 
+     * como para la actualización de registros. 
+     * Se crea debido a que la validación de 
+     * codeigniter a demas de funcionar solo 
+     * para la adición de registros lo hace
+     * para un solo campo.
+     * @param array $params Nombre de tabla y campos separados por "."
+     * @return boolean Retorna TRUE Si pasa la validación, FALSE si falla.
+     */
+    public function unique_varios($value, $params) {
+        //El primer punto procede al nombre de la tabla.
+        //La variable $table toma el nombre de la tabla.
+        //La variable $field toma el nombre de los campos.
+        $data = explode("*", $params, 2);
+        $array = FALSE;
+        if (count($data) > 1) {
+            list($array, $params) = explode("*", $params, 2);
+        }
+        list($table, $field) = explode(".", $params, 2);
+        $fields = explode(".", $field); //Se crea un array con los nombres de los campos a validar
+        $this->CI->form_validation->set_message('unique_varios', 'Los datos ya existen en la base de datos'); //Mensaje de validación
+        if (!empty($table) && !empty($field)) {
+            if ($this->CI->input->post('id')) {
+                $this->CI->db->where('id !=', $this->CI->input->post('id'));
+            }
+            foreach ($fields as $fieldF) {//Se asigna la variable $fieldF para cada campo.
+                //Se hace un where para cada campo recibido como parametro
+                if ($array) {
+                    //Si el campo viene dentro de un array se toma el valor del campo de dentro de dicho array
+                    $this->CI->db->where($fieldF, $this->CI->input->post($array[$fieldF]));
+                } else {
+                    //Si el campo no viene dentro de un array se toma el valor del campo recibido como parametro
+                    $this->CI->db->where($fieldF, $this->CI->input->post($fieldF));
+                }
+            }
+            $query = $this->CI->db->get($table);
+            if ($query->row())
+                return FALSE;
+            return TRUE;
+        } else {
+            show_error('Call to Form_validation::unique_varios() failed, parameter not in "table.column" notation');
+        }
+    }
+
+    /**
      * Este método extiende la libreria de validacion de codigniter
      * reemplazando la forma como se muestran los errores 
      * el sistema, en este caso se mostraran todos en la cabecera

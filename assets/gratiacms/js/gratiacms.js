@@ -1,5 +1,20 @@
 var GratiaCms = function () {
     return{
+        ajax: function (url, data, campo, el, funcion) {
+            el.block({ 
+                message: '<h1>Procesando...</h1>', 
+                css: { border: '3px solid #a00' } 
+            }); 
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: data,
+                success: function (respuesta) {
+                    var error = "<strong>!Error¡</strong>";
+                    el.unblock(); 
+                }
+            });
+        },
         tooltip: function () {
             $('body').tooltip({
                 selector: '.tooltips',
@@ -29,6 +44,31 @@ var GratiaCms = function () {
                         orderable: false,
                         targets: [-1]
                     }, {
+                        searchable: false,
+                        targets: [-1]
+                    }]
+            });
+        },
+        datatablesEsp: function () {
+            $('#dataTables').DataTable({
+                responsive: true,
+                language: {
+                    lengthMenu: "  _MENU_ items",
+                    paginate: {
+                        "previous": "Sig",
+                        "next": "Prev",
+                        "last": "Ultimo",
+                        "first": "Primero"
+                    },
+                    zeroRecords: "No se encontraron registros",
+                    info: "Mostrando _PAGE_ de _PAGES_ pagina(s)",
+                    infoEmpty: "No hay registros disponibles",
+                    infoFiltered: "(Filtrado de un total de _MAX_ registros)",
+                    sSearch: "Buscar:",
+                    processing: "Procesando"
+                },
+                "bSort": false,
+                columnDefs: [{
                         searchable: false,
                         targets: [-1]
                     }]

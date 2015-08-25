@@ -48,6 +48,8 @@
         <!--Validacion de Formualarios-->
         <script type="text/javascript" src="<?php echo base_url() ?>assets/gratiacms/js/jquery-validate/jquery.validate.min.js"></script>
         <script type="text/javascript" src="<?php echo base_url() ?>assets/gratiacms/js/jquery-validate/localization/messages_es.min.js"></script>
+        <!--Block en Ajax-->
+        <script type="text/javascript" src="<?php echo base_url() ?>assets/gratiacms/js/jquery-blockUI/jquery.blockUI.js"></script>
         <!-- Custom Theme JavaScript -->
         <script type="text/javascript" src="<?php echo base_url() . TEMPLATEASSETS ?>dist/js/sb-admin-2.js"></script>
         <!-- Custom GratiaCms JavaScript -->
