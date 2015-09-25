@@ -74,6 +74,32 @@ var GratiaCms = function () {
                     }]
             });
         },
+        eliminar: function () {
+            $('.panel-body').on('click', '.eliminar', function (e) {
+                e.preventDefault();
+                var url = e.currentTarget;
+                bootbox.dialog({
+                    message: "Seguro desea Eliminar este registro?",
+                    title: "Confirmar acción",
+                    buttons: {
+                        success: {
+                            label: "Aceptar",
+                            className: "btn-success",
+                            callback: function () {
+                                window.location = url;
+                            }
+                        },
+                        danger: {
+                            label: "Cancelar",
+                            className: "btn-danger",
+                            callback: function () {
+                                return true;
+                            }
+                        }
+                    }
+                });
+            });
+        },
         validacion_general: function (id, reglas, mensajes) {
             var form_principal = $(id);
             var error = $('.alert-danger', form_principal);

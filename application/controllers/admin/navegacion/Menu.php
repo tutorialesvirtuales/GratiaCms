@@ -37,12 +37,11 @@ class Menu extends MY_Controller {
      * utilizando la libreria nestable de Jquery
      * @return      String vista
      */
-    public function index($tipo_menu) {
+    public function index() {
         $data = array(
             'titulo' => $this->titulo,
             'contenido' => $this->vista . 'index',
-            'datas' => $this->Modelo->order_by('posicion', 'asc')->get_many_by(array('tipo_menu_id' => $tipo_menu, 'menu_id IS NULL')),
-            'tipo_menu' => $tipo_menu,
+            'datas' => $this->Modelo->order_by('posicion', 'asc')->get_many_by(array('menu_id IS NULL')),
         );
         $this->load->view(THEME . TEMPLATE, $data);
     }
@@ -56,15 +55,14 @@ class Menu extends MY_Controller {
      *          redirecciona hacia el método Index
      *          de lo contrario carga la vista
      */
-    public function crear($tipo_menu) {
+    public function crear() {
         if ($this->input->post() && $this->Modelo->insert($this->input->post())) {
             mensaje_alerta('hecho', 'crear');
-            redirect($this->url.$tipo_menu);
+            redirect($this->url);
         } else {
             $data = array(
                 'titulo' => 'Crear ' . $this->titulo,
                 'contenido' => $this->vista . 'crear',
-                'tipo_menu' => $tipo_menu,
             );
             $this->load->view(THEME . TEMPLATE, $data);
         }
@@ -172,7 +170,7 @@ class Menu extends MY_Controller {
     public function crear_archivos() {
         $this->load->model('admin/seguridad/Rol_model');
         $roles = $this->Rol_model->get_all();
-        $this->load->library('Menu_sih');
+        $this->load->library('Menu_gratiacms');
         $tipos = $this->Tipo_menu_model->get_all();
         foreach ($tipos as $tipo) {
             $archivos = glob(FCPATH . 'assets/gratiacms/menus/' . $tipo->id . '/*.json');
@@ -180,7 +178,7 @@ class Menu extends MY_Controller {
                 unlink($archivo);
             }
             foreach ($roles as $rol) {
-                $this->menu_sih->getMenuByRol($rol->id, $tipo->id);
+                $this->menu_gratiacms->getMenuByRol($rol->id, $tipo->id);
             }
         }
         mensaje_alerta('hecho', 'archivo_menu');

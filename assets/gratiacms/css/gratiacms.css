@@ -2,3 +2,7 @@ label span.required {
     color: #E13300;
 }
 
+.bold{
+    font-weight:600;
+}
+

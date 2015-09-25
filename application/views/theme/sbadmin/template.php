@@ -20,6 +20,8 @@
         <link rel="stylesheet" type="text/css" href="<?php echo base_url() . TEMPLATEASSETS ?>dist/css/sb-admin-2.css" >
         <!-- Custom Fonts -->
         <link rel="stylesheet" type="text/css" href="<?php echo base_url() . TEMPLATEASSETS ?>bower_components/font-awesome/css/font-awesome.min.css" >
+        <!-- Menu Nestable -->
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>assets/gratiacms/js/jquery-nestable/jquery.nestable.css">
         <!-- Custom GratiaCms Styles -->
         <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>assets/gratiacms/css/gratiacms.css">
         <!-- jQuery -->
@@ -50,6 +52,10 @@
         <script type="text/javascript" src="<?php echo base_url() ?>assets/gratiacms/js/jquery-validate/localization/messages_es.min.js"></script>
         <!--Block en Ajax-->
         <script type="text/javascript" src="<?php echo base_url() ?>assets/gratiacms/js/jquery-blockUI/jquery.blockUI.js"></script>
+        <!--Alertas-->
+        <script type="text/javascript" src="<?php echo base_url() ?>assets/gratiacms/js/bootbox.min.js"></script>
+        <!--Menu Nestable-->
+        <script type="text/javascript" src="<?php echo base_url() ?>assets/gratiacms/js/jquery-nestable/jquery.nestable.js"></script>
         <!-- Custom Theme JavaScript -->
         <script type="text/javascript" src="<?php echo base_url() . TEMPLATEASSETS ?>dist/js/sb-admin-2.js"></script>
         <!-- Custom GratiaCms JavaScript -->
@@ -57,6 +63,7 @@
         <script>
             $(document).ready(function () {
                 GratiaCms.tooltip();
+                GratiaCms.eliminar();
             });
             /*
              * Evitar enter en los forms
