@@ -39,9 +39,7 @@ class Tipo_menu extends MY_Controller {
     public function index() {
         $data = array(
             'titulo' => $this->titulo,
-            'contenido' => $this->vista . 'index',
-            'datas' => $this->Modelo->get_all(),
-            'breads' => array(array('ruta' => 'javascript:;', 'titulo' => $this->titulo))
+            'contenido' => $this->vista . 'index'
         );
         $this->load->view(THEME . TEMPLATE, $data);
     }
@@ -61,9 +59,7 @@ class Tipo_menu extends MY_Controller {
         } else {
             $data = array(
                 'titulo' => 'Crear ' . $this->titulo,
-                'contenido' => $this->vista . 'crear',
-                'breads' => array(array('ruta' => $this->url, 'titulo' => $this->titulo),
-                    array('ruta' => 'javascript:;', 'titulo' => 'Crear'))
+                'contenido' => $this->vista . 'crear'
             );
             $this->load->view(THEME . TEMPLATE, $data);
         }
@@ -88,9 +84,7 @@ class Tipo_menu extends MY_Controller {
             $data = array(
                 'titulo' => 'Actualizar ' . $this->titulo,
                 'contenido' => $this->vista . 'crear',
-                'data' => $dato ? $dato : show_404(),
-                'breads' => array(array('ruta' => $this->url, 'titulo' => $this->titulo),
-                    array('ruta' => 'javascript:;', 'titulo' => 'Actualizar ' . $this->titulo)),
+                'data' => $dato ? $dato : show_404()
             );
             $this->load->view(THEME . TEMPLATE, $data);
         }

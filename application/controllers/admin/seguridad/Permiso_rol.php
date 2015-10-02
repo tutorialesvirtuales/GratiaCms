@@ -45,11 +45,7 @@ class Permiso_rol extends MY_Controller {
     public function index() {
         $data = array(
             'titulo' => $this->titulo,
-            'contenido' => $this->vista . 'index',
-            'rols' => $this->Rol_model->get_all(),
-            'permisos' => $this->Permiso_model->order_by('nombre','asc')->get_all(),
-            'permiso_rol' => $this->Modelo->getAll(),
-            'breads' => array(array('ruta' => 'javascript:;', 'titulo' => $this->titulo))
+            'contenido' => $this->vista . 'index'
         );
         $this->load->view(THEME . TEMPLATE, $data);
     }

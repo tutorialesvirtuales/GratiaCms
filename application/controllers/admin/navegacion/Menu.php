@@ -41,7 +41,6 @@ class Menu extends MY_Controller {
         $data = array(
             'titulo' => $this->titulo,
             'contenido' => $this->vista . 'index',
-            'datas' => $this->Modelo->order_by('posicion', 'asc')->get_many_by(array('menu_id IS NULL')),
         );
         $this->load->view(THEME . TEMPLATE, $data);
     }
@@ -79,17 +78,16 @@ class Menu extends MY_Controller {
      *          redirecciona hacia el método Index
      *          de lo contrario carga la vista
      */
-    public function actualizar($id = FALSE, $tipo_menu = FALSE) {
+    public function actualizar($id = FALSE) {
         if ($this->input->post() && $this->Modelo->update($id, $this->input->post())) {
             mensaje_alerta('hecho', 'actualizar');
-            redirect($this->url.$tipo_menu);
+            redirect($this->url);
         } else {
             $dato = $this->Modelo->get($id);
             $data = array(
                 'titulo' => 'Actualizar ' . $this->titulo,
                 'contenido' => $this->vista . 'crear',
                 'data' => $dato ? $dato : show_404(),
-                'tipo_menu' => $tipo_menu,
             );
             $this->load->view(THEME . TEMPLATE, $data);
         }

@@ -38,8 +38,7 @@ class Nueva extends MY_Controller {
     public function index() {
         $data = array(
             'titulo' => $this->titulo,
-            'contenido' => $this->vista . 'index',
-            'breads' => array(array('ruta' => 'javascript:;', 'titulo' => $this->titulo))
+            'contenido' => $this->vista . 'index'
         );
         $this->load->view(THEME . TEMPLATE, $data);
     }

@@ -8,11 +8,7 @@ $permiso_rol = $this->Modelo->getAll();
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <span>Usuarios del sistema</span>
-                <span>
-                    <a href="<?php echo $this->url ?>crear" class="btn btn-success btn-sm tooltips" data-original-title="Nuevo registro">
-                        Nuevo registro <i class="fa fa-plus-circle"></i></a>
-                </span>
+                <span>Asignar Permisos a los roles</span>
             </div>
             <!-- /.panel-heading -->
             <div class="panel-body">

@@ -39,7 +39,6 @@ class Permiso extends MY_Controller {
         $data = array(
             'titulo' => $this->titulo,
             'contenido' => $this->vista . 'index',
-            'breads' => array(array('ruta' => 'javascript:;', 'titulo' => $this->titulo))
         );
         $this->load->view(THEME . TEMPLATE, $data);
     }
@@ -59,9 +58,7 @@ class Permiso extends MY_Controller {
         } else {
             $data = array(
                 'titulo' => 'Crear ' . $this->titulo,
-                'contenido' => $this->vista . 'crear',
-                'breads' => array(array('ruta' => $this->url, 'titulo' => $this->titulo),
-                    array('ruta' => 'javascript:;', 'titulo' => 'Crear'))
+                'contenido' => $this->vista . 'crear'
             );
             $this->load->view(THEME . TEMPLATE, $data);
         }
@@ -86,9 +83,7 @@ class Permiso extends MY_Controller {
             $data = array(
                 'titulo' => 'Actualizar ' . $this->titulo,
                 'contenido' => $this->vista . 'crear',
-                'data' =>  $dato ? $dato : show_404(),
-                'breads' => array(array('ruta' => $this->url, 'titulo' => $this->titulo),
-                    array('ruta' => 'javascript:;', 'titulo' => 'Actualizar ' . $this->titulo)),
+                'data' =>  $dato ? $dato : show_404()
             );
             $this->load->view(THEME . TEMPLATE, $data);
         }
